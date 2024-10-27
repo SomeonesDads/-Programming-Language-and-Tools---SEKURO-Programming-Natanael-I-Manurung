@@ -1,0 +1,41 @@
+FUNCTION parse_int(string):
+    DEFINE string_to_int AS DICTIONARY:
+        'ze': 0,
+        'on': 1,
+        'tw': 2,
+        'th': 3,
+        'fo': 4,
+        'fi': 5,
+        'si': 6,
+        'se': 7,
+        'ei': 8,
+        'ni': 9,
+        'te': 10,
+        'el': 11
+
+    SPLIT string INTO no_space USING DELIMITERS [SPACE, HYPHEN]
+    SET endnum TO 0
+    SET tempnum TO 0
+
+    FOR each index, num IN enumerate(no_space):
+        IF last two characters of num ARE 'ee':  // Handles numbers thirteen to nineteen
+            tempnum += string_to_int[num first two characters] + 10
+        ELSE IF last character of num IS 'y':   // Handles numbers twenty to ninety
+            tempnum += string_to_int[num first two characters] * 10
+        ELSE IF num IS "hundred":
+            tempnum *= 100
+        ELSE IF num IS "thousand":
+            tempnum *= 1000
+            endnum += tempnum
+            SET tempnum TO 0
+        ELSE IF num IS "million":
+            tempnum *= 1000000
+        ELSE IF num IS "and":
+            CONTINUE
+        ELSE IF num IS "twelve":                  // Special case for twelve
+            tempnum += 12
+        ELSE:
+            tempnum += string_to_int[num first two characters]
+
+    endnum += tempnum
+    RETURN endnum

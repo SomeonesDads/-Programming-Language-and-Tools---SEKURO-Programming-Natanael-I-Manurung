@@ -35,5 +35,3 @@ def parse_int(string):
             tempnum += string_to_int[num[0:2]]
     endnum += tempnum
     return endnum
-ans = input("Write down a number: ")
-print(parse_int(ans))
